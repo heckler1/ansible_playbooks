@@ -1,4 +1,8 @@
 ---
+- name: Import variables
+  include_vars:
+    file: ssh_vars.yml
+
 - name: Update and configure new Linux-based host
   hosts: all
   tasks:
