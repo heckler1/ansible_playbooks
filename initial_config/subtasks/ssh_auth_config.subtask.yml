@@ -14,4 +14,4 @@
     key: '{{ item }}'
     manage_dir: yes
   with_file:
-   - '{{ key_file }}
+   - '{{ key_file }}'

@@ -3,7 +3,7 @@
   hosts: all
   tasks:
 #Import variables
-    - name: Import variables:
+    - name: Import variables
       include_vars:
         file: ssh_vars.yml
         

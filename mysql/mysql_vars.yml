@@ -1,3 +1,3 @@
 mysql_root_password: ### YOUR PASSWORD HERE ###
 mysql_nextcloud_password: ### YOUR PASSWORD HERE ###
-mysql_root_mycnf: nextcloud/my.cnf.j2
+mysql_root_mycnf: my.cnf.j2

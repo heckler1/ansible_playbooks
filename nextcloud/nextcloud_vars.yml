@@ -1,0 +1,8 @@
+hostname: ### DESIRED HOSTNAME HERE ###
+country: ### YOUR COUNTRY ###
+state: ### YOUR STATE ###
+city: ### YOUR CITY ###
+org: ### YOUR ORGANIZATION ###
+mysql_root_password: ### YOUR PASSWORD HERE ###
+mysql_nextcloud_password: ### YOUR PASSWORD HERE ###
+mysql_root_mycnf: my.cnf.j2
