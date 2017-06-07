@@ -1,0 +1,5 @@
+- name: Start and enable firewall - CentOS
+  systemd:
+    state: started
+    enabled: yes
+    name: firewalld

@@ -1,0 +1,25 @@
+- name: Remove default NTP servers - CentOS
+  lineinfile:
+    name: /etc/ntp.conf
+    line: "{{item}}"
+    state: absent
+  with_items: 
+  - server 0.centos.pool.ntp.org iburst
+  - server 1.centos.pool.ntp.org iburst
+  - server 2.centos.pool.ntp.org iburst
+  - server 3.centos.pool.ntp.org iburst
+
+- name: Add Google NTP servers - CentOS
+  blockinfile:
+    name: /etc/ntp.conf
+    insertafter: "# Use public servers from the pool.ntp.org project."
+    block: |
+      server time1.google.com iburst
+      server time2.google.com iburst
+      server time3.google.com iburst
+      server time4.google.com iburst
+
+- name: Restart ntpd
+  systemd:
+    state: restarted
+    name: ntpd

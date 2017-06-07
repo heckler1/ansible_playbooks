@@ -1,0 +1,6 @@
+
+---
+- name: Reboot
+  hosts: all
+  tasks:
+    - include: subtasks/reboot.subtask.yml

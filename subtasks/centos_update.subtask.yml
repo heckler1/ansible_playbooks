@@ -1,0 +1,7 @@
+- name: Update repositories and installed packages - CentOS
+  package:
+    name: '*'
+    state: latest
+
+- name: Auto-remove orphaned dependencies - CentOS
+  command: yum -y autoremove

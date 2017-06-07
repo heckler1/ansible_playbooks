@@ -1,0 +1,12 @@
+- name: Update repositories - Ubuntu
+  apt:
+    update_cache: yes
+
+- name: Update installed packages - Ubuntu
+  apt:
+    upgrade: full
+
+- name: Auto-remove orphaned dependencies and repo listings- Ubuntu
+  apt:
+    autoremove: yes
+    autoclean: yes

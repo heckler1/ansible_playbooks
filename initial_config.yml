@@ -1,0 +1,40 @@
+---
+- name: Update and configure new Linux-based host
+  hosts: all
+  tasks:
+
+#Update Host
+    - include: subtasks/centos_update.subtask.yml
+      when: ansible_distribution == "CentOS"
+    - include: subtasks/ubuntu_update.subtask.yml
+      when: ansible_distribution == "Ubuntu"
+
+#Install Base Packages        
+    - name: Install packages
+      package:
+        name: nano,ntp,wget,open-vm-tools
+        state: latest
+
+#Activate firewall   
+    - include: subtasks/centos_firewall.subtask.yml
+      when: ansible_distribution == "CentOS"
+    - include: subtasks/ubuntu_firewall.subtask.yml
+      when: ansible_distribution == "Ubuntu"
+
+#Install SSH Key
+    - include: subtasks/ssh_auth_config.subtask.yml user=## YOUR USER HERE ## public_keys=## YOUR PUBLIC KEYS HERE ##
+
+#Configure NTP
+    - include: subtasks/centos_ntp.subtask.yml
+      when: ansible_distribution == "CentOS"
+    - include: subtasks/ubuntu_ntp.subtask.yml
+      when: ansible_distribution == "Ubuntu"
+
+#Remove Security Vulnerabilities
+    - include: subtasks/centos_hardening.subtask.yml
+      when: ansible_distribution == "CentOS"
+    - include: subtasks/ubuntu_hardening.subtask.yml
+      when: ansible_distribution == "Ubuntu"
+
+#Reboot Host
+    - include: subtasks/reboot.subtask.yml

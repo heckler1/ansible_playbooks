@@ -1,0 +1,9 @@
+---
+- name: Update host
+  hosts: all
+  tasks:
+    - include: subtasks/centos_update.subtask.yml
+      when: ansible_distribution == "CentOS"
+      
+    - include: subtasks/ubuntu_update.subtask.yml
+      when: ansible_distribution == "Ubuntu"    

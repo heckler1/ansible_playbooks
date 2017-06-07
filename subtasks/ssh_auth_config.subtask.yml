@@ -1,0 +1,40 @@
+#vars:
+#  user: ## YOUR USER HERE ##
+#  public_keys: ## YOUR PUBLIC KEYS HERE ##
+
+- name: Create SSH key directory for user "{{ user }}"
+  file:
+    path: /home/{{ user }}/.ssh
+    state: directory
+    mode: 0700
+    recurse: yes
+    owner: {{ user }}
+
+- name: Create SSH key file for user "{{ user }}"
+  file:
+    path: /home/{{ user }}/.ssh/authorized_keys
+    state: touch
+    mode: 0600
+    owner: {{ user }}
+
+- name: Copy SSH keys for user "{{ user }}"
+  copy: content="{{ public_keys }}"
+    # Separate the keys with \n. No spaces.
+- name: Create SSH key directory for user "root"
+  file:
+    path: /root/.ssh
+    state: directory
+    mode: 0700
+    recurse: yes
+    owner: root
+
+- name: Create SSH key file for user "root"
+  file:
+    path: /root/.ssh/authorized_keys
+    state: touch
+    mode: 0600
+    owner: root
+
+- name: Copy SSH keys for user "root"
+  copy: content="{{ public_keys }}"
+    # Separate the keys with \n. No spaces.

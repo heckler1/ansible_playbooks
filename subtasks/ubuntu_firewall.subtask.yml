@@ -1,0 +1,5 @@
+- name: Start and enable firewall - Ubuntu
+  ufw:
+    rule: allow
+    port: ssh
+    state: enabled
