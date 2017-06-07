@@ -1,40 +1,21 @@
-#vars:
-#  user: ## YOUR USER HERE ##
-#  public_keys: ## YOUR PUBLIC KEYS HERE ##
+- name: Import variable values
+  include_vars:
+    file: ssh_vars.yml
 
-- name: Create SSH key directory for user "{{ user }}"
-  file:
-    path: /home/{{ user }}/.ssh
-    state: directory
-    mode: 0700
-    recurse: yes
-    owner: {{ user }}
-
-- name: Create SSH key file for user "{{ user }}"
-  file:
-    path: /home/{{ user }}/.ssh/authorized_keys
-    state: touch
-    mode: 0600
-    owner: {{ user }}
-
-- name: Copy SSH keys for user "{{ user }}"
-  copy: content="{{ public_keys }}"
-    # Separate the keys with \n. No spaces.
-- name: Create SSH key directory for user "root"
-  file:
-    path: /root/.ssh
-    state: directory
-    mode: 0700
-    recurse: yes
-    owner: root
-
-- name: Create SSH key file for user "root"
-  file:
-    path: /root/.ssh/authorized_keys
-    state: touch
-    mode: 0600
-    owner: root
-
-- name: Copy SSH keys for user "root"
-  copy: content="{{ public_keys }}"
-    # Separate the keys with \n. No spaces.
+- name: Add keys for '{{ user }}'
+  authorized_key:
+    user: '{{ user }}'
+    state: present
+    key: '{{ item }}'
+    manage_dir: yes
+  with_file:
+   - '{{ key_file }}'
+   
+- name: Add keys for root
+  authorized_key:
+    user: root
+    state: present
+    key: '{{ item }}'
+    manage_dir: yes
+  with_file:
+   - '{{ key_file }}

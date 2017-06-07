@@ -2,7 +2,6 @@
 - name: Update and configure new Linux-based host
   hosts: all
   tasks:
-
 #Update Host
     - include: subtasks/centos_update.subtask.yml
       when: ansible_distribution == "CentOS"
@@ -21,8 +20,8 @@
     - include: subtasks/ubuntu_firewall.subtask.yml
       when: ansible_distribution == "Ubuntu"
 
-#Install SSH Key
-    - include: subtasks/ssh_auth_config.subtask.yml user=## YOUR USER HERE ## public_keys=## YOUR PUBLIC KEYS HERE ##
+#Install SSH Keys
+    - include: subtasks/ssh_auth_config.subtask.yml 
 
 #Configure NTP
     - include: subtasks/centos_ntp.subtask.yml
