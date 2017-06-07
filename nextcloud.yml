@@ -1,0 +1,213 @@
+#Installs Nextcloud 12 on CentOS 7
+
+---
+- name: Install Nextcloud instance
+  hosts: all
+  tasks:
+    - name: Import variables
+      include_vars:
+        file: nextcloud_vars.yml
+    
+    - name: Install EPEL package repo.
+      yum:
+        name: epel-release
+        state: latest
+  
+    - name: Install Webtatic package repo.
+      yum:
+        name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+        state: present
+  
+    - name: Update installed packages
+      yum:
+        name: '*'
+        state: latest
+  
+    - name: Install Nextcloud dependencies
+      yum:
+        name: '{{ item }}'
+        state: latest
+      with_items:
+        - httpd
+        - php70w
+        - php70w-dom
+        - php70w-mbstring
+        - php70w-gd
+        - php70w-pdo
+        - php70w-json
+        - php70w-xml
+        - php70w-zip
+        - php70w-curl
+        - php70w-mcrypt
+        - php70w-pear
+        - setroubleshoot-server
+        - mariadb-server
+        - mariadb-devel
+        - php70w-mysql
+        - unzip
+        - libselinux-python
+        - policycoreutils-python
+        - libsemanage-python
+        - python-pip
+        - gcc
+        - python-devel
+        
+    - name: Install MySQLDb Python Module
+      pip:
+        name: MySQL-Python
+        state: latest
+        
+    - name: Set Apache and MariaDB to start at boot
+      systemd: 
+        name: '{{ item }}'
+        state: started
+        enabled: yes
+      with_items:
+      - httpd
+      - mariadb
+      
+#mysql_secure_installlation
+    - name: Set root Password
+      mysql_user: name=root host={{ item }} password={{ mysql_root_password }} state=present check_implicit_admin=yes login_password={{ mysql_root_password }}
+      with_items:
+        - localhost
+        - 127.0.0.1
+        - ::1
+
+    - name: Add .my.cnf
+      template: src='{{ mysql_root_mycnf }}' dest=/root/.my.cnf owner=root group=root mode=0600
+      
+    - name: Reload privilege tables
+      command: 'mysql -ne "{{ item }}"'
+      with_items:
+        - FLUSH PRIVILEGES
+      changed_when: False
+
+    - name: Remove anonymous users
+      mysql_user:
+        name: ''
+        host_all: yes
+        state: absent
+
+    - name: Disallow root login remotely
+      command: 'mysql -ne "{{ item }}"'
+      with_items:
+        - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+      changed_when: False
+
+    - name: Remove test database and access to it
+      command: 'mysql -ne "{{ item }}"'
+      with_items:
+        - DROP DATABASE test
+        - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
+      changed_when: False
+      ignore_errors: True
+
+    - name: Reload privilege tables
+      command: 'mysql -ne "{{ item }}"'
+      with_items:
+        - FLUSH PRIVILEGES
+      changed_when: False
+
+    - name: Create a database named "nextcloud"
+      mysql_db:
+        name: nextcloud
+        state: present
+
+    - name: Create nextcloud database user
+      mysql_user:
+        name: nextcloud
+        password: '{{ mysql_nextcloud_password }}'
+        priv: 'nextcloud.*:ALL'
+        state: present
+    
+    - name: Reload privilege tables
+      command: 'mysql -ne "{{ item }}"'
+      with_items:
+        - FLUSH PRIVILEGES
+      changed_when: False
+    
+    - name: Restart httpd to load MySQL PHP extension
+      systemd:
+        name: httpd
+        state: restarted
+        
+    - name: Download and unzip Nextcloud
+      unarchive:
+        src: https://download.nextcloud.com/server/releases/latest-12.zip
+        dest: /var/www/
+        remote_src: yes
+        
+    - name: Move Nextcloud directory to WebRoot
+      command: '{{ item }}'
+      with_items:
+      - rm -r /var/www/html/
+      - mv /var/www/nextcloud /var/www/html
+      
+    - name: Create data directory
+      file:
+        path: /var/www/html/data
+        state: directory
+        
+    - name: Set permissions on WebRoot
+      file: 
+        path: /var/www/html/
+        owner: apache
+        group: apache
+        recurse: yes
+        state: directory
+        
+    - name: Create Apache config file
+      blockinfile:
+        path: /etc/httpd/conf.d/nextcloud.conf
+        create: yes
+        block: |
+          Alias /nextcloud "/var/www/hmtl/nextcloud/"
+          <Directory /var/www/hmtl/nextcloud/>
+            Options +FollowSymlinks
+            AllowOverride All
+            <IfModule mod_dav.c>
+              Dav off
+            </IfModule>
+            SetEnv HOME /var/www/hmtl/nextcloud
+            SetEnv HTTP_HOME /var/www/hmtl/nextcloud
+          </Directory>
+          
+#    - name: Configure SELinux for WebRoot
+#      sefcontext:
+#        target: '{{ item }}'
+#        setype: httpd_sys_rw_content_t
+#        state: present
+#      with_items:
+#       - /var/www/hmtl/nextcloud/data(/.*)?
+#       - /var/www/hmtl/nextcloud/config(/.*)?
+#       - /var/www/hmtl/nextcloud/apps(/.*)?
+#       - /var/www/html/.htaccess
+#       - /var/www/html/.user.ini
+#    
+#    - name: Configure SELinux for MariaDB
+#      seboolean:
+#        name: httpd_can_network_connect_db
+#        state: yes
+#        persistent: yes
+
+    - name: Set SELinux to permissive mode
+      selinux:
+       state: permissive
+       
+    - name: Restart httpd to apply config changes
+      systemd:
+        name: httpd
+        state: restarted
+
+    - name: Open firewall
+      firewalld:
+        port: '{{ item }}'
+        state: enabled
+        permanent: yes
+      with_items:
+      - 80/tcp
+      - 443/tcp
+#- name: Secure Nextcloud instance
+#  hosts: all
+#  tasks:
