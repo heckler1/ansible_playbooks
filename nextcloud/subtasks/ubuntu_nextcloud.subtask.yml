@@ -1,6 +1,5 @@
 #Installs Nextcloud 12 on Ubuntu 16.04
 
-#Prepare Ubuntu to work with Ansible
 - name: Install Ansible dependencies on Ubuntu
   raw: "sudo apt-get update -y && sudo apt-get install -y python aptitude"
   when: ansible_distribution == "Ubuntu"
