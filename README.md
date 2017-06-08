@@ -16,7 +16,7 @@ The Initial Configuration script performs the following tasks:
 The MySQL script installs MariaDB/MySQL and completes mysql_secure_installation. All variables are set in mysql_vars.yml
 
 The Nextcloud script installs Nextcloud with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs by default. All variables are set in nextcloud_vars.yml
-The a Nextcloud instance installed with this play returns a 0/10 on OpenVAS.
+A Nextcloud instance installed with this play returns a 0/10 on OpenVAS.
 DB name is "nextcloud". DB user is "nextcloud"
 To remove the memcache warning on the Nextcloud Admin page, just add the line "'memcache.local' => '\OC\Memcache\APCu'," to /var/www/html/config/config.php.
 
