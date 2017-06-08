@@ -1,3 +1,5 @@
+# Installs MySQL and completes mysql_secure_installation on CentOS 7
+
 - name: Install MariaDB and dependencies
   yum:
     name: '{{ item }}'
@@ -9,7 +11,7 @@
   - gcc
   - python-devel
   
-- name: Install MySQLDb Python Module
+- name: Install MySQL Python Module
   pip:
     name: MySQL-Python
     state: latest
