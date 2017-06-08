@@ -1,6 +1,7 @@
 ---
 - name: Update and configure new Linux-based host
   hosts: all
+  become: true
   tasks:
 #Import variables
     - name: Import variables
@@ -8,7 +9,7 @@
         file: ssh_vars.yml
         
 #Prepare Ubuntu to work with Ansible
-    - name: Install Ansible dependancies on Ubuntu
+    - name: Install Ansible dependencies on Ubuntu
       raw: "sudo apt-get update -y && sudo apt-get install -y python aptitude"
       when: ansible_distribution == "Ubuntu"
       

@@ -1,7 +1,9 @@
 ---
 - name: Update host
   hosts: all
+  become: true
   tasks:
+
     - include: subtasks/centos_update.subtask.yml
       when: ansible_distribution == "CentOS"
       
