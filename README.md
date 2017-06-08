@@ -1,6 +1,6 @@
-All scripts require the sudo password to be set. This can be done at runtime with -K, or by setting the variable "ansible_become_pass".
+All scripts will run on CentOS 7 or Ubuntu 16.04. They require the sudo password to be set. This can be done at runtime with -K, or by setting the variable "ansible_become_pass".
 
-The Initial Configuration script performs the following tasks on either CentOS 7, or Ubuntu 16.04:
+The Initial Configuration script performs the following tasks:
 
 1. It fully updates the host to the latest packages.
 2. It cleans out any orphaned dependencies and the like with autoremove.
@@ -13,9 +13,9 @@ The Initial Configuration script performs the following tasks on either CentOS 7
 9. It disables TCP timestamps.
 10. Finally, it reboots the host to apply the changes and latest kernel.
 
-The MySQL script installs MariaDB/MySQL on CentOS 7 or Ubuntu 16.04, and completes mysql_secure_installation. All variables are set in mysql_vars.yml
+The MySQL script installs MariaDB/MySQL and completes mysql_secure_installation. All variables are set in mysql_vars.yml
 
-The Nextcloud script installs Nextcloud on CentOS 7 or Ubuntu 16.04, with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs by default. All variables are set in nextcloud_vars.yml
+The Nextcloud script installs Nextcloud with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs by default. All variables are set in nextcloud_vars.yml
 DB name is "nextcloud". DB user is "nextcloud"
 To remove the memcache warning on the Nextcloud Admin page, just add the line "'memcache.local' => '\OC\Memcache\APCu'," to /var/www/html/config/config.php.
 
