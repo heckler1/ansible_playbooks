@@ -1,0 +1,14 @@
+---
+- name: Install HTTPS LAMP Stack
+  hosts: all
+  become: true
+  tasks:
+    - name: Import variables
+      include_vars:
+        file: lamp_vars.yml
+    
+    - include: subtasks/centos_lamp.subtask.yml
+      when: ansible_distribution == "CentOS"
+      
+    - include: subtasks/ubuntu_lamp.subtask.yml
+      when: ansible_distribution == "Ubuntu"
