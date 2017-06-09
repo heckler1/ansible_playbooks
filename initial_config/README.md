@@ -13,15 +13,3 @@ The Initial Configuration script performs the following tasks:
 9. It disables TCP timestamps.
 10. Finally, it reboots the host to apply the changes and latest kernel.
 
-The LAMP play installs a LAMP Stack with self-signed HTTPS by default. The variables are defined in lamp_vars.yml
-
-The MySQL script installs MariaDB/MySQL and completes mysql_secure_installation. All variables are defined in mysql_vars.yml
-
-The Nextcloud script installs Nextcloud with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs by default. All variables are defined in nextcloud_vars.yml
-A Nextcloud instance installed with this play returns a 0/10 on OpenVAS.
-DB name is "nextcloud". DB user is "nextcloud"
-To remove the memcache warning on the Nextcloud Admin page, just add the line "'memcache.local' => '\OC\Memcache\APCu'," to /var/www/html/config/config.php.
-
-The Update script is self explanatory. It autoremoves unneeded dependencies by default.
-
-reboot.yml is also self explanatory. It waits 60 seconds for the host to come back online.
