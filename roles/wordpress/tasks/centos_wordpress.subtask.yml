@@ -1,0 +1,71 @@
+#Installs Wordpress on CentOS 7
+
+- name: Install Wordpress dependencies
+  yum:
+    name: php70w-gd
+    state: latest
+
+- name: Create a database named "wordpress"
+  mysql_db:
+    name: wordpress
+    state: present
+
+- name: Create wordpress database user
+  mysql_user:
+    name: wordpress
+    password: '{{ mysql_wordpress_password }}'
+    priv: 'wordpress.*:ALL'
+    state: present
+
+- name: Reload privilege tables
+  command: 'mysql -ne "FLUSH PRIVILEGES"'
+  changed_when: False
+
+- name: Restart httpd to load MySQL PHP extension
+  systemd:
+    name: httpd
+    state: restarted
+    
+- name: Check if Wordpress is already in the WebRoot
+  stat:
+    path: /var/www/html/wp-config.php
+  register: wordpress_files
+
+- name: Download and unzip Wordpress
+  when: wordpress_files.stat.exists == False
+  unarchive:
+    src: http://wordpress.org/latest.zip
+    dest: /var/www/
+    remote_src: yes
+        
+- name: Move Wordpress directory to WebRoot
+  when: wordpress_files.stat.exists == False
+  command: '{{ item }}'
+  with_items:
+  - rm -r /var/www/html/
+  - mv /var/www/wordpress /var/www/html
+  
+- name: Create uploads directory
+  when: wordpress_files.stat.exists == False
+  file:
+    path: /var/www/html/wp-content/uploads
+    state: directory
+    
+- name: Upload wp-config.php
+  when: wordpress_files.stat.exists == False
+  template: 
+    src: wp-config.php.j2
+    dest: /var/www/html/wp-config.php
+    owner: apache
+    group: apache
+    mode: 0644
+
+- name: Set SELinux to permissive mode
+  selinux:
+   state: permissive
+   policy: targeted
+    
+- name: Restart httpd to apply config changes
+  systemd:
+    name: httpd
+    state: restarted

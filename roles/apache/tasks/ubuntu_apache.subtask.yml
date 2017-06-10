@@ -1,62 +1,44 @@
-#Installs HTTPS Apache and PHP7 Stack on CentOS 7
-
+#Installs HTTPS Apache on Ubuntu 16.04
+  
 - name: Set hostname
   hostname:
     name: '{{ hostname }}'
-     
-- name: Install PHP repo
-  yum:
-    name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-    state: present
 
-- name: Install Apache, PHP, and dependencies
-  yum:
+- name: Install Apache and dependencies
+  apt:
     name: '{{ item }}'
     state: latest
   with_items:
-    - httpd
-    - php70w
-    - php70w-dom
-    - php70w-mbstring
-    - php70w-gd
-    - php70w-pdo
-    - php70w-json
-    - php70w-xml
-    - php70w-zip
-    - php70w-curl
-    - php70w-mcrypt
-    - php70w-pear
-    - php70w-mysql
-    - setroubleshoot-server
-    - unzip
-    - libselinux-python
-    - mod_ssl
-
-- name: Restart Apache and set to start at boot
-  systemd: 
-    name: httpd
-    state: restarted
-    enabled: yes
-
+    - apache2
+    
 - name: Create cert directory
   file:
-    path: /etc/httpd/ssl/
+    path: /etc/apache2/ssl/
     state: directory
     
 - name: Generate HTTPS Certs
-  command: openssl req -new -nodes -x509 -subj "/C={{ country }}/ST={{ state }}/L={{ city }}/O={{ org }}/CN={{ hostname }}" -days 3650 -keyout /etc/httpd/ssl/lamp.key -out /etc/httpd/ssl/lamp.crt -extensions v3_ca creates=/etc/httpd/ssl/lamp.crt
+  command: openssl req -new -nodes -x509 -subj "/C={{ country }}/ST={{ state }}/L={{ city }}/O={{ org }}/CN={{ hostname }}" -days 3650 -keyout /etc/apache2/ssl/lamp.key -out /etc/apache2/ssl/lamp.crt -extensions v3_ca creates=/etc/apache2/ssl/lamp.crt
 
+- name: Enable Apache SSL Module
+  apache2_module:
+    name: '{{ item }}'
+    state: present
+  with_items: 
+  - ssl
+  - rewrite
+  - headers
+  
 - name: Create Apache config file
   blockinfile:
-    path: /etc/httpd/conf.d/lamp.conf
+    path: /etc/apache2/sites-available/lamp.conf
     create: yes
     block: |
       <VirtualHost *:443>
         ServerName {{ hostname }}
         ServerAlias {{ ansible_default_ipv4.address }}
         SSLEngine on
-        SSLCertificateFile      /etc/httpd/ssl/lamp.crt
-        SSLCertificateKeyFile /etc/httpd/ssl/lamp.key
+        SSLCertificateFile      /etc/apache2/ssl/lamp.crt
+        SSLCertificateKeyFile /etc/apache2/ssl/lamp.key
         # HSTS (mod_headers is required) (15768000 seconds = 6 months)
         <IfModule mod_headers.c>
           Header always set Strict-Transport-Security "max-age=15552000; includeSubDomains"
@@ -87,14 +69,24 @@
       </Directory>
       Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure
 
-- name: Restart httpd to apply config changes
+- name: Activate Apache config file
+  file:
+    src: /etc/apache2/sites-available/lamp.conf
+    dest: /etc/apache2/sites-enabled/lamp.conf
+    state: link
+
+- name: Restart Apache to apply config changes and set to start at boot
   systemd:
-    name: httpd
+    name: apache2
     state: restarted
+    enabled: yes
 
 - name: Open firewall
-  firewalld:
-    port: 443/tcp
+  ufw:
     state: enabled
-    permanent: yes
-    immediate: yes
+    port: '{{ item }}'
+    proto: tcp
+    rule: allow
+  with_items:
+  - 22
+  - 443

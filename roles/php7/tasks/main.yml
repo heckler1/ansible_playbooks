@@ -1,0 +1,5 @@
+- include: centos_php7.subtask.yml
+  when: ansible_distribution == "CentOS"
+  
+- include: ubuntu_php7.subtask.yml
+  when: ansible_distribution == "Ubuntu"

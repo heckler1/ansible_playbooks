@@ -1,5 +1,5 @@
 ---
-- name: Install HTTPS LAMP Stack
+- name: Install WordPress instance
   hosts: all
   become: true
   roles:
@@ -7,3 +7,4 @@
     - mysql
     - apache
     - php7
+    - wordpress

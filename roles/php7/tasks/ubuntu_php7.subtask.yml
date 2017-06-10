@@ -1,0 +1,24 @@
+#Installs PHP7 on Ubuntu 16.04
+
+- name: Install PHP and dependencies
+  apt:
+    name: '{{ item }}'
+    state: latest
+  with_items:
+    - php
+    - libapache2-mod-php
+    - php-mcrypt
+    - php-mysql
+    - php-bz2
+    - php-curl
+    - php-gd
+    - php-imagick
+    - php-intl
+    - php-mbstring
+    - php-xml
+    - php-zip
+
+- name: Restart Apache to enable PHP
+  systemd:
+    name: apache2
+    state: restarted
