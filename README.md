@@ -22,6 +22,10 @@ A Nextcloud instance installed with this play returns a 0/10 on OpenVAS.
 DB name is "nextcloud". DB user is "nextcloud"
 To remove the memcache warning on the Nextcloud Admin page, just add the line "'memcache.local' => '\OC\Memcache\APCu'," to /var/www/html/config/config.php.
 
+The Reboot play is also self explanatory. It waits 60 seconds for the host to come back online.
+
 The Update play is self explanatory. It autoremoves unneeded dependencies by default.
 
-The Reboot play is also self explanatory. It waits 60 seconds for the host to come back online.
+The WordPress role installs WordPress with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs.
+A WordPress instance installed with this play returns a 0/10 on OpenVAS.
+DB name is "wordpress". DB user is "wordpress"
