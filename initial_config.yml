@@ -1,0 +1,6 @@
+---
+- name: Update and configure new Linux-based host
+  hosts: all
+  become: true
+  roles:
+    - common

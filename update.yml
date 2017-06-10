@@ -1,0 +1,30 @@
+---
+- name: Update host
+  hosts: all
+  become: true
+  tasks:
+    - name: Update repositories and installed packages - CentOS
+      package:
+        name: '*'
+        state: latest
+      when: ansible_distribution == "CentOS"
+      
+    - name: Auto-remove orphaned dependencies - CentOS
+      command: yum -y autoremove
+      when: ansible_distribution == "CentOS"
+
+    - name: Update repositories - Ubuntu
+      apt:
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"  
+      
+    - name: Update installed packages - Ubuntu
+      apt:
+        upgrade: full
+      when: ansible_distribution == "Ubuntu"  
+      
+    - name: Auto-remove orphaned dependencies and repo listings- Ubuntu
+      apt:
+        autoremove: yes
+        autoclean: yes
+      when: ansible_distribution == "Ubuntu"  

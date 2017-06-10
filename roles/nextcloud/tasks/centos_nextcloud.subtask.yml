@@ -1,0 +1,89 @@
+#Installs Nextcloud 12 on CentOS 7
+
+- name: Install Nextcloud dependencies
+  yum:
+    name: '{{ item }}'
+    state: latest
+  with_items:
+    - php70w-opcache
+    - php70w-pecl-apcu
+
+- name: Create a database named "nextcloud"
+  mysql_db:
+    name: nextcloud
+    state: present
+
+- name: Create nextcloud database user
+  mysql_user:
+    name: nextcloud
+    password: '{{ mysql_nextcloud_password }}'
+    priv: 'nextcloud.*:ALL'
+    state: present
+
+- name: Reload privilege tables
+  command: 'mysql -ne "FLUSH PRIVILEGES"'
+  changed_when: False
+
+- name: Restart httpd to load MySQL PHP extension
+  systemd:
+    name: httpd
+    state: restarted
+    
+- name: Check if Nextcloud is already in the WebRoot
+  stat:
+    path: /var/www/html/index.php
+  register: nextcloud_files
+
+- name: Download and unzip Nextcloud
+  when: nextcloud_files.stat.exists == False
+  unarchive:
+    src: https://download.nextcloud.com/server/releases/latest-12.zip
+    dest: /var/www/
+    remote_src: yes
+        
+- name: Move Nextcloud directory to WebRoot
+  when: nextcloud_files.stat.exists == False
+  command: '{{ item }}'
+  with_items:
+  - rm -r /var/www/html/
+  - mv /var/www/nextcloud /var/www/html
+  
+- name: Create data directory
+  file:
+    path: /var/www/html/data
+    state: directory
+    
+- name: Set permissions on WebRoot
+  file: 
+    path: /var/www/html/
+    owner: apache
+    group: apache
+    recurse: yes
+    state: directory
+
+- name: Set SELinux to permissive mode
+  selinux:
+   state: permissive
+   policy: targeted
+   
+- name: Backup opcache.ini
+  command: mv /etc/php.d/opcache.ini /etc/php.d/opcache.ini.bak
+  
+- name: Apply recommended opcache config
+  blockinfile:
+    path: /etc/php.d/opcache.ini
+    create: yes
+    block: |
+      zend_extension=/usr/lib64/php/modules/opcache.so
+      opcache.enable=1
+      opcache.enable_cli=1
+      opcache.interned_strings_buffer=8
+      opcache.max_accelerated_files=10000
+      opcache.memory_consumption=128
+      opcache.save_comments=1
+      opcache.revalidate_freq=1
+    
+- name: Restart httpd to apply config changes
+  systemd:
+    name: httpd
+    state: restarted

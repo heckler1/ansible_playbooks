@@ -1,0 +1,9 @@
+---
+- name: Install Nextcloud 12 instance
+  hosts: all
+  become: true
+  roles:
+    - common
+    - mysql
+    - apache_php7
+    - nextcloud

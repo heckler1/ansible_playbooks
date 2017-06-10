@@ -1,6 +1,6 @@
 All plays will run on CentOS 7 or Ubuntu 16.04. They require the sudo password to be set. This can be done at runtime with -K, or by setting the variable "ansible_become_pass".
 
-The common role performs the following tasks:
+This role performs the following tasks:
 
 1. It fully updates the host to the latest packages.
 2. It cleans out any orphaned dependencies and the like with autoremove.
@@ -13,15 +13,3 @@ The common role performs the following tasks:
 9. It disables TCP timestamps.
 10. Finally, it reboots the host to apply the changes and latest kernel.
 
-The Apache & PHP 7 role installs an Apache 2 and PHP 7 Stack with self-signed HTTPS.
-
-The MySQL role installs MariaDB/MySQL and completes mysql_secure_installation.
-
-The Nextcloud role installs Nextcloud with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs by default.
-A Nextcloud instance installed with this play returns a 0/10 on OpenVAS.
-DB name is "nextcloud". DB user is "nextcloud"
-To remove the memcache warning on the Nextcloud Admin page, just add the line "'memcache.local' => '\OC\Memcache\APCu'," to /var/www/html/config/config.php.
-
-The Update play is self explanatory. It autoremoves unneeded dependencies by default.
-
-The Reboot play is also self explanatory. It waits 60 seconds for the host to come back online.

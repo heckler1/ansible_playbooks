@@ -1,0 +1,7 @@
+---
+- name: Install MariaDB or MySQL and complete mysql_secure_installation
+  hosts: all
+  become: true
+  roles:
+    - common
+    - mysql

@@ -1,0 +1,8 @@
+---
+- name: Install HTTPS LAMP Stack
+  hosts: all
+  become: true
+  roles:
+    - common
+    - mysql
+    - apache_php7

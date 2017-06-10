@@ -1,0 +1,40 @@
+#Prepare Ubuntu to work with Ansible
+- name: Confirm installation of Ansible dependencies on Ubuntu
+  raw: "sudo apt-get update -y && sudo apt-get install -y python aptitude"
+  when: ansible_distribution == "Ubuntu"
+  
+#Update Host
+- include: centos_update.subtask.yml
+  when: ansible_distribution == "CentOS"
+- include: ubuntu_update.subtask.yml
+  when: ansible_distribution == "Ubuntu"
+
+#Install Base Packages        
+- name: Install packages
+  package:
+    name: nano,ntp,wget,open-vm-tools
+    state: latest
+
+#Activate firewall   
+- include: centos_firewall.subtask.yml
+  when: ansible_distribution == "CentOS"
+- include: ubuntu_firewall.subtask.yml
+  when: ansible_distribution == "Ubuntu"
+
+#Install SSH Keys
+- include: ssh_auth_config.subtask.yml 
+
+#Configure NTP
+- include: centos_ntp.subtask.yml
+  when: ansible_distribution == "CentOS"
+- include: ubuntu_ntp.subtask.yml
+  when: ansible_distribution == "Ubuntu"
+
+#Remove Security Vulnerabilities
+- include: centos_hardening.subtask.yml
+  when: ansible_distribution == "CentOS"
+- include: ubuntu_hardening.subtask.yml
+  when: ansible_distribution == "Ubuntu"
+
+#Reboot Host
+- include: reboot.subtask.yml
