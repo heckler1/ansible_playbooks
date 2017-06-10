@@ -1,0 +1,8 @@
+external_url: '{{ ansible_default_ipv4.address }}'
+# email address gitlab will use to send email
+gitlab_email: gitlab@example.com
+smtp_server: smtp.example.com
+smtp_port: 25
+smtp_username: gitlab
+smtp_password: gitP@ssw0rd
+smtp_domain: example.com

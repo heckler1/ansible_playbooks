@@ -1,0 +1,36 @@
+# Install GitLab on CentOS 7
+
+- name: Check if GitLab repo is installed
+  stat:
+    path: /etc/yum.repos.d/gitlab_gitlab-ce.repo
+  register: gitlab_repo
+
+- name: Install GitLab package repository
+  when: gitlab_repo.stat.exists == False
+  command: '{{ item }}'
+  with_items:
+  - wget https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh -O /tmp/gitlab.sh
+  - bash /tmp/gitlab.sh
+
+- name: Install GitLab
+  yum:
+    name: gitlab-ce
+    state: latest
+    
+- name: Install gitlab.rb config file
+  template: 
+    src: gitlab.rb.j2
+    dest: /etc/gitlab/gitlab.rb 
+    owner: root
+    group: root
+    mode: 0600
+    
+- name: Perform initial GitLab configuration
+  command: gitlab-ctl reconfigure
+
+- name: Open firewall
+  firewalld:
+    port: 80/tcp
+    state: enabled
+    permanent: yes
+    immediate: yes

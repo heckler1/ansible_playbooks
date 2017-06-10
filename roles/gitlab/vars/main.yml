@@ -1,0 +1,8 @@
+external_url:
+# email address gitlab will use to send email
+gitlab_email:
+smtp_server:
+smtp_port:
+smtp_username:
+smtp_password:
+smtp_domain:
