@@ -1,27 +1,27 @@
 # Install GitLab on Ubuntu 16.04
 
-- name: Check if GitLab repo is installed
+- name: Check if GitLab repository is installed - Ubuntu
   stat:
     path: /etc/apt/sources.list.d/gitlab_gitlab-ce.list
   register: gitlab_repo
 
-- name: Install GitLab package repository
+- name: Install GitLab package repository - Ubuntu
   when: gitlab_repo.stat.exists == False
   command: '{{ item }}'
   with_items:
   - wget https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh -O /tmp/gitlab.sh
   - bash /tmp/gitlab.sh
       
-- name: Update repositories
+- name: Update repositories - Ubuntu
   apt:
     update_cache: yes
     
-- name: Install GitLab
+- name: Install GitLab - Ubuntu
   apt:
     name: gitlab-ce
     state: latest
     
-- name: Install gitlab.rb config file
+- name: Install gitlab.rb config file - Ubuntu
   template: 
     src: gitlab.rb.j2
     dest: /etc/gitlab/gitlab.rb 
@@ -29,10 +29,10 @@
     group: root
     mode: 0600
     
-- name: Perform initial GitLab configuration
+- name: Perform initial GitLab configuration - Ubuntu
   command: gitlab-ctl reconfigure
   
-- name: Open firewall
+- name: Open firewall - Ubuntu
   ufw:
     state: enabled
     port: '{{ item }}'

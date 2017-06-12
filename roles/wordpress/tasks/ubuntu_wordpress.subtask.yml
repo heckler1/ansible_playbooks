@@ -1,6 +1,6 @@
 #Installs Wordpress on Ubuntu 16.04
 
-- name: Install Wordpress dependencies
+- name: Install Wordpress dependencies - Ubuntu
   apt:
     name: '{{ item }}'
     state: latest
@@ -8,53 +8,47 @@
   - php-gd
   - unzip
 
-- name: Create a database named "wordpress"
+- name: Create a database for WordPress - Ubuntu
   mysql_db:
     name: wordpress
     state: present
 
-- name: Create wordpress database user
+- name: Create WordPress database user - Ubuntu
   mysql_user:
     name: wordpress
     password: '{{ mysql_wordpress_password }}'
     priv: 'wordpress.*:ALL'
     state: present
 
-- name: Reload privilege tables
+- name: Reload privilege tables - Ubuntu
   command: 'mysql -ne "FLUSH PRIVILEGES"'
   changed_when: False
-
-- name: Restart httpd to load MySQL PHP extension
-  systemd:
-    name: apache2
-    state: restarted
     
-- name: Check if Wordpress is already in the WebRoot
+- name: Check if WordPress is already in the webroot - Ubuntu
   stat:
     path: /var/www/html/wp-config.php
   register: wordpress_files
 
-- name: Download and unzip Wordpress
+- name: Download and unzip WordPress - Ubuntu
   when: wordpress_files.stat.exists == False
   unarchive:
     src: http://wordpress.org/latest.zip
     dest: /var/www/
     remote_src: yes
         
-- name: Move Wordpress directory to WebRoot
+- name: Move WordPress directory to webroot - Ubuntu
   when: wordpress_files.stat.exists == False
   command: '{{ item }}'
   with_items:
   - rm -r /var/www/html/
   - mv /var/www/wordpress /var/www/html
   
-- name: Create uploads directory
-  when: wordpress_files.stat.exists == False
+- name: Create uploads directory - Ubuntu
   file:
     path: /var/www/html/wp-content/uploads
     state: directory
     
-- name: Upload wp-config.php
+- name: Upload wp-config.php - Ubuntu
   when: wordpress_files.stat.exists == False
   template: 
     src: wp-config.php.j2
@@ -63,7 +57,7 @@
     group: www-data
     mode: 0644
 
-- name: Restart Apache to apply config changes
+- name: Restart Apache to apply configuration changes - Ubuntu
   systemd:
     name: apache2
     state: restarted

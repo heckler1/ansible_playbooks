@@ -1,25 +1,25 @@
 #Installs HTTPS Apache on Ubuntu 16.04
   
-- name: Set hostname
+- name: Set hostname - Ubuntu
   hostname:
     name: '{{ hostname }}'
 
-- name: Install Apache and dependencies
+- name: Install Apache and dependencies - Ubuntu
   apt:
     name: '{{ item }}'
     state: latest
   with_items:
     - apache2
     
-- name: Create cert directory
+- name: Create certificate directory - Ubuntu
   file:
     path: /etc/apache2/ssl/
     state: directory
     
-- name: Generate HTTPS Certs
+- name: Generate self-signed HTTPS certificates - Ubuntu
   command: openssl req -new -nodes -x509 -subj "/C={{ country }}/ST={{ state }}/L={{ city }}/O={{ org }}/CN={{ hostname }}" -days 3650 -keyout /etc/apache2/ssl/lamp.key -out /etc/apache2/ssl/lamp.crt -extensions v3_ca creates=/etc/apache2/ssl/lamp.crt
 
-- name: Enable Apache SSL Module
+- name: Enable required Apache modules - Ubuntu
   apache2_module:
     name: '{{ item }}'
     state: present
@@ -28,7 +28,7 @@
   - rewrite
   - headers
   
-- name: Create Apache config file
+- name: Create Apache configuration file - Ubuntu
   blockinfile:
     path: /etc/apache2/sites-available/lamp.conf
     create: yes
@@ -69,19 +69,19 @@
       </Directory>
       Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure
 
-- name: Activate Apache config file
+- name: Activate Apache configuration file - Ubuntu
   file:
     src: /etc/apache2/sites-available/lamp.conf
     dest: /etc/apache2/sites-enabled/lamp.conf
     state: link
 
-- name: Restart Apache to apply config changes and set to start at boot
+- name: Restart Apache and set it to start at boot - Ubuntu
   systemd:
     name: apache2
     state: restarted
     enabled: yes
 
-- name: Open firewall
+- name: Open firewall - Ubuntu
   ufw:
     state: enabled
     port: '{{ item }}'

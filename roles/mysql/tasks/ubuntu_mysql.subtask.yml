@@ -1,6 +1,6 @@
 # Installs MySQL and completes mysql_secure_installation on Ubuntu 16.04
 
-- name: Install MySQL and dependencies
+- name: Install MySQL and dependencies - Ubuntu
   apt:
     name: '{{ item }}'
     state: latest
@@ -11,18 +11,18 @@
   - gcc
   - python-dev
   
-- name: Install MySQL Python Module
+- name: Install MySQL Python module - Ubuntu
   pip:
     name: MySQL-Python
     state: latest
 
-- name: Set MySQL to start at boot
+- name: Set MySQL to start at boot - Ubuntu
   systemd: 
     name: mysql
     state: started
     enabled: yes
 
-- name: Set root password
+- name: Set root password - Ubuntu
   mysql_user: 
     name: root
     host: '{{ item }}'
@@ -35,7 +35,7 @@
     - 127.0.0.1
     - ::1
 
-- name: Add .my.cnf
+- name: Add root .my.cnf - Ubuntu
   template: 
     src: my.cnf.j2
     dest: /root/.my.cnf 
@@ -43,23 +43,23 @@
     group: root
     mode: 0600
  
-- name: Reload privilege tables
+- name: Reload privilege tables - Ubuntu
   command: 'mysql -ne "FLUSH PRIVILEGES"'
   changed_when: False
 
-- name: Remove anonymous users
+- name: Remove anonymous users - Ubuntu
   mysql_user:
     name: ''
     host_all: yes
     state: absent
 
-- name: Disallow root login remotely
+- name: Disallow root login remotely - Ubuntu
   command: 'mysql -ne "{{ item }}"'
   changed_when: False
   with_items:
   - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
 
-- name: Remove test database and access to it
+- name: Remove test database and access to it - Ubuntu
   command: 'mysql -ne "{{ item }}"'
   with_items:
     - DROP DATABASE test
@@ -67,6 +67,6 @@
   changed_when: False
   ignore_errors: True
 
-- name: Reload privilege tables
+- name: Reload privilege tables - Ubuntu
   command: 'mysql -ne "FLUSH PRIVILEGES"'
   changed_when: False

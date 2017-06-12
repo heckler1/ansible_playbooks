@@ -1,11 +1,11 @@
 #Installs PHP7 on CentOS 7
 
-- name: Install PHP repo
+- name: Install PHP repository - CentOS
   yum:
     name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
     state: present
 
-- name: Install PHP and dependencies
+- name: Install PHP and dependencies - CentOS
   yum:
     name: '{{ item }}'
     state: latest
@@ -23,7 +23,7 @@
     - php70w-pear
     - php70w-mysql
 
-- name: Restart httpd to enable PHP
+- name: Restart Apache to enable PHP - CentOS
   systemd:
     name: httpd
     state: restarted

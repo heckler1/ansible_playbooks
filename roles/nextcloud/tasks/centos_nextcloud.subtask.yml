@@ -1,6 +1,6 @@
 #Installs Nextcloud 12 on CentOS 7
 
-- name: Install Nextcloud dependencies
+- name: Install Nextcloud dependencies - CentOS
   yum:
     name: '{{ item }}'
     state: latest
@@ -8,28 +8,23 @@
     - php70w-opcache
     - php70w-pecl-apcu
 
-- name: Create a database named "nextcloud"
+- name: Create a database for Nextcloud - CentOS
   mysql_db:
     name: nextcloud
     state: present
 
-- name: Create nextcloud database user
+- name: Create Nextcloud database user - CentOS
   mysql_user:
     name: nextcloud
     password: '{{ mysql_nextcloud_password }}'
     priv: 'nextcloud.*:ALL'
     state: present
 
-- name: Reload privilege tables
+- name: Reload privilege tables - CentOS
   command: 'mysql -ne "FLUSH PRIVILEGES"'
   changed_when: False
-
-- name: Restart httpd to load MySQL PHP extension
-  systemd:
-    name: httpd
-    state: restarted
     
-- name: Check if Nextcloud is already in the WebRoot
+- name: Check if Nextcloud is already in the webroot - CentOS
   stat:
     path: /var/www/html/index.php
   register: nextcloud_files
@@ -41,19 +36,19 @@
     dest: /var/www/
     remote_src: yes
         
-- name: Move Nextcloud directory to WebRoot
+- name: Move Nextcloud directory to webroot - CentOS
   when: nextcloud_files.stat.exists == False
   command: '{{ item }}'
   with_items:
   - rm -r /var/www/html/
   - mv /var/www/nextcloud /var/www/html
   
-- name: Create data directory
+- name: Create data directory - CentOS
   file:
     path: /var/www/html/data
     state: directory
     
-- name: Set permissions on WebRoot
+- name: Set permissions on webroot - CentOS
   file: 
     path: /var/www/html/
     owner: apache
@@ -61,15 +56,15 @@
     recurse: yes
     state: directory
 
-- name: Set SELinux to permissive mode
+- name: Set SELinux to permissive mode - CentOS
   selinux:
    state: permissive
    policy: targeted
    
-- name: Backup opcache.ini
+- name: Backup opcache.ini - CentOS
   command: mv /etc/php.d/opcache.ini /etc/php.d/opcache.ini.bak
   
-- name: Apply recommended opcache config
+- name: Apply recommended opcache configuration - CentOS
   blockinfile:
     path: /etc/php.d/opcache.ini
     create: yes
@@ -83,7 +78,7 @@
       opcache.save_comments=1
       opcache.revalidate_freq=1
     
-- name: Restart httpd to apply config changes
+- name: Restart Apache to apply configuration changes - CentOS
   systemd:
     name: httpd
     state: restarted

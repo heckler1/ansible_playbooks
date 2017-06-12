@@ -1,10 +1,10 @@
 #Installs HTTPS Apache on CentOS 7
 
-- name: Set hostname
+- name: Set hostname - CentOS
   hostname:
     name: '{{ hostname }}'
 
-- name: Install Apache and dependencies
+- name: Install Apache and dependencies - CentOS
   yum:
     name: '{{ item }}'
     state: latest
@@ -15,15 +15,15 @@
     - libselinux-python
     - mod_ssl
 
-- name: Create cert directory
+- name: Create certificate directory - CentOS
   file:
     path: /etc/httpd/ssl/
     state: directory
     
-- name: Generate HTTPS Certs
+- name: Generate self-signed HTTPS certificates - CentOS
   command: openssl req -new -nodes -x509 -subj "/C={{ country }}/ST={{ state }}/L={{ city }}/O={{ org }}/CN={{ hostname }}" -days 3650 -keyout /etc/httpd/ssl/lamp.key -out /etc/httpd/ssl/lamp.crt -extensions v3_ca creates=/etc/httpd/ssl/lamp.crt
 
-- name: Create Apache config file
+- name: Create Apache configuration file - CentOS
   blockinfile:
     path: /etc/httpd/conf.d/lamp.conf
     create: yes
@@ -64,13 +64,13 @@
       </Directory>
       Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure
 
-- name: Restart Apache to apply config changes and set to start at boot
+- name: Restart Apache and set it to start at boot - CentOS
   systemd: 
     name: httpd
     state: restarted
     enabled: yes
 
-- name: Open firewall
+- name: Open firewall - CentOS
   firewalld:
     port: 443/tcp
     state: enabled

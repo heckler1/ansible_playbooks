@@ -1,51 +1,51 @@
 #Installs Nextcloud 12 on Ubuntu 16.04
 
-- name: Install Nextcloud dependencies
+- name: Install Nextcloud dependencies - Ubuntu
   apt:
     name: unzip
     state: latest
 
-- name: Create a database named "nextcloud"
+- name: Create a database for Nextcloud - Ubuntu
   mysql_db:
     name: nextcloud
     state: present
 
-- name: Create nextcloud database user
+- name: Create Nextcloud database user - Ubuntu
   mysql_user:
     name: nextcloud
     password: '{{ mysql_nextcloud_password }}'
     priv: 'nextcloud.*:ALL'
     state: present
 
-- name: Reload privilege tables
+- name: Reload privilege tables - Ubuntu
   command: 'mysql -ne "FLUSH PRIVILEGES"'
   changed_when: False
 
-- name: Check if Nextcloud is already in the WebRoot
+- name: Check if Nextcloud is already in the webroot - Ubuntu
   stat:
     path: /var/www/html/index.php
   register: nextcloud_files
 
-- name: Download and unzip Nextcloud
+- name: Download and unzip Nextcloud - Ubuntu
   when: nextcloud_files.stat.exists == False
   unarchive:
     src: https://download.nextcloud.com/server/releases/latest-12.zip
     dest: /var/www/
     remote_src: yes
         
-- name: Move Nextcloud directory to WebRoot
+- name: Move Nextcloud directory to webroot - Ubuntu
   when: nextcloud_files.stat.exists == False
   command: '{{ item }}'
   with_items:
   - rm -r /var/www/html/
   - mv /var/www/nextcloud /var/www/html
   
-- name: Create data directory
+- name: Create data directory - Ubuntu
   file:
     path: /var/www/html/data
     state: directory
     
-- name: Set ownership on WebRoot
+- name: Set ownership on webroot - Ubuntu
   file: 
     path: /var/www/html/
     owner: www-data
@@ -53,10 +53,10 @@
     recurse: yes
     state: directory
 
-- name: Backup opcache.ini
+- name: Backup opcache.ini - Ubuntu
   command: mv /etc/php/7.0/apache2/conf.d/10-opcache.ini /etc/php/7.0/apache2/conf.d/10-opcache.ini.bak
   
-- name: Apply recommended opcache config
+- name: Apply recommended opcache configuration - Ubuntu
   blockinfile:
     path: /etc/php/7.0/apache2/conf.d/10-opcache.ini
     create: yes
@@ -70,7 +70,7 @@
       opcache.save_comments=1
       opcache.revalidate_freq=1 
 
-- name: Restart Apache to apply config changes
+- name: Restart Apache to apply configuration changes - Ubuntu
   systemd:
     name: apache2
     state: restarted
