@@ -26,9 +26,9 @@ To remove the memcache warning on the Nextcloud Admin page, just add the line "'
 
 The PHP role installs PHP 7.
 
-The Reboot play is also self explanatory. It waits 60 seconds for the host to come back online.
+The Reboot play is self explanatory. It waits 60 seconds for the host to come back online.
 
-The Update play is self explanatory. It autoremoves unneeded dependencies by default.
+The Update play is also self explanatory. It autoremoves unneeded dependencies by default.
 
 The WordPress role installs WordPress with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs.
 A WordPress instance installed with this play returns a 0/10 on OpenVAS.
