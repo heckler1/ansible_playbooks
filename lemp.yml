@@ -1,11 +1,10 @@
 ---
-- name: Install Nextcloud 12 instance
+- name: Install HTTPS LEMP Stack
   hosts: all
   become: true
   roles:
     - common
     - mysql
-    - apache
+    - nginx_webserver
     - php7
-    - nextcloud
     - reboot

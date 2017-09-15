@@ -1,6 +1,6 @@
 All plays will run on CentOS 7 or Ubuntu 16.04. They require the sudo password to be set. This can be done at runtime with -K, or by setting the variable "ansible_become_pass".
 
-The Apache installs an Apache 2 Server with self-signed HTTPS.
+The Apache role installs an Apache 2 server with self-signed HTTPS and a strict TLS configuration.
 
 The common role performs the following tasks:
 
@@ -24,12 +24,18 @@ A Nextcloud instance installed with this play returns a 0/10 on OpenVAS.
 DB name is "nextcloud". DB user is "nextcloud"
 To remove the memcache warning on the Nextcloud Admin page, just add the line "'memcache.local' => '\OC\Memcache\APCu'," to /var/www/html/config/config.php.
 
+The NGINX web server role installs an NGINX web server with self-signed HTTPS and a strict TLS configuration.
+
 The PHP role installs PHP 7.
 
-The Reboot play is self explanatory. It waits 60 seconds for the host to come back online.
+The reboot role reboots the host and, by default, waits up to 60 seconds for it to come back online, checking every 15 seconds. These values are relatively short, and geared mostly towards virtual machines. For physical hosts, higher values are recommended.
 
-The Update play is also self explanatory. It autoremoves unneeded dependencies by default.
+The update play is self explanatory. It autoremoves unneeded dependencies by default.
 
 The WordPress role installs WordPress with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs.
 A WordPress instance installed with this play returns a 0/10 on OpenVAS.
 DB name is "wordpress". DB user is "wordpress"
+
+The LAMP play installs the Apache, MySQL, and PHP roles and then reboots the host.
+
+The LEMP play installs the NGINX web server, MySQL, and PHP roles and then reboots the host.

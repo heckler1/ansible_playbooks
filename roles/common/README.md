@@ -12,4 +12,3 @@ This role performs the following tasks:
 8. It forces root logins over SSH to use key-based auth.
 9. It disables TCP timestamps.
 10. Finally, it reboots the host to apply the changes and latest kernel.
-

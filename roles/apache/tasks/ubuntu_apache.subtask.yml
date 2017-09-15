@@ -17,7 +17,7 @@
     state: directory
     
 - name: Generate self-signed HTTPS certificates - Ubuntu
-  command: openssl req -new -nodes -x509 -subj "/C={{ country }}/ST={{ state }}/L={{ city }}/O={{ org }}/CN={{ hostname }}" -days 3650 -keyout /etc/apache2/ssl/lamp.key -out /etc/apache2/ssl/lamp.crt -extensions v3_ca creates=/etc/apache2/ssl/lamp.crt
+  command: openssl req -new -nodes -x509 -subj "/C={{ country }}/ST={{ state }}/L={{ city }}/O={{ org }}/CN={{ hostname }}" -days 3650 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt -extensions v3_ca creates=/etc/apache2/ssl/apache.crt
 
 - name: Enable required Apache modules - Ubuntu
   apache2_module:
@@ -30,15 +30,15 @@
   
 - name: Create Apache configuration file - Ubuntu
   blockinfile:
-    path: /etc/apache2/sites-available/lamp.conf
+    path: /etc/apache2/sites-available/apache.conf
     create: yes
     block: |
       <VirtualHost *:443>
         ServerName {{ hostname }}
         ServerAlias {{ ansible_default_ipv4.address }}
         SSLEngine on
-        SSLCertificateFile      /etc/apache2/ssl/lamp.crt
-        SSLCertificateKeyFile /etc/apache2/ssl/lamp.key
+        SSLCertificateFile      /etc/apache2/ssl/apache.crt
+        SSLCertificateKeyFile /etc/apache2/ssl/apache.key
         # HSTS (mod_headers is required) (15768000 seconds = 6 months)
         <IfModule mod_headers.c>
           Header always set Strict-Transport-Security "max-age=15552000; includeSubDomains"
@@ -71,8 +71,8 @@
 
 - name: Activate Apache configuration file - Ubuntu
   file:
-    src: /etc/apache2/sites-available/lamp.conf
-    dest: /etc/apache2/sites-enabled/lamp.conf
+    src: /etc/apache2/sites-available/apache.conf
+    dest: /etc/apache2/sites-enabled/apache.conf
     state: link
 
 - name: Restart Apache and set it to start at boot - Ubuntu
@@ -84,9 +84,6 @@
 - name: Open firewall - Ubuntu
   ufw:
     state: enabled
-    port: '{{ item }}'
+    port: 443
     proto: tcp
     rule: allow
-  with_items:
-  - 22
-  - 443
