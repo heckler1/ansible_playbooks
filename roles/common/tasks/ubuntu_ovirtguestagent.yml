@@ -1,0 +1,11 @@
+- name: Creat oVirt log file
+  file: 
+    path: /var/log/ovirt-guest-agent/ovirt-guest-agent.log
+    state: touch
+    mode: 0666
+
+- name: Activate oVirt Guest Agent
+  systemd:
+    name: ovirt-guest-agent
+    state: started
+    enabled: yes

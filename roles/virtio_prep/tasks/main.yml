@@ -1,4 +1,4 @@
-- import_tasks: virtio_prep.centos.yml
+- import_tasks: centos_virtioprep.subtask.yml
   when: ansible_distribution == "CentOS"
-- import_tasks: virtio_prep.ubuntu.yml
+- import_tasks: ubuntu_virtioprep.subtask.yml
   when: ansible_distribution == "Ubuntu"

@@ -1,0 +1,5 @@
+- name: Activate oVirt Guest Agent
+  systemd:
+    name: ovirt-guest-agent
+    state: started
+    enabled: yes

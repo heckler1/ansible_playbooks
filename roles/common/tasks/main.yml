@@ -15,6 +15,12 @@
     name: nano,ntp,wget,ovirt-guest-agent
     state: latest
 
+# Configure oVirt Guest Agent
+- import_tasks: centos_ovirtguestagent.subtask.yml
+  when: ansible_distribution == "CentOS"
+- import_tasks: ubuntu_ovirtguestagent.subtask.yml
+  when: ansible_distribution == "Ubuntu"
+
 #Activate firewall   
 - import_tasks: centos_firewall.subtask.yml
   when: ansible_distribution == "CentOS"

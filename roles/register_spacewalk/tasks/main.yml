@@ -1,2 +1,2 @@
-- import_tasks: register_spacewalk.centos.yml
+- import_tasks: centos_registerspacewalk.subtask.yml
   when: ansible_distribution == "CentOS"
