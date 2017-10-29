@@ -1,0 +1,1 @@
+This role unregisters a CentOS-based host from Spacewalk and removes the Spacewalk packages. It does not remove m2crypto, which is a Spacewalk dependancy, because other packages may depend on it. It does not remove the EPEL repo either.

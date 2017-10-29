@@ -1,0 +1,24 @@
+- name: Remove VMWare Tools
+  yum:
+    name: open-vm-tools
+    state: absent
+
+- name: Install oVirt Guest Agent
+  yum:
+    name: ovirt-guest-agent
+    state: present
+
+- name: Creat oVirt log file
+  file: 
+    path: /var/log/ovirt-guest-agent/ovirt-guest-agent.log
+    state: touch
+    mode: 0666
+
+- name: Activate oVirt Guest Agent
+  systemd:
+    name: ovirt-guest-agent
+    state: started
+    enabled: yes
+
+- name: Shutdown the host
+  command: shutdown now

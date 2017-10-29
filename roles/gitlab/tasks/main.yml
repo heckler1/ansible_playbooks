@@ -1,5 +1,5 @@
-- include: centos_gitlab.subtask.yml
+- import_tasks: centos_gitlab.subtask.yml
   when: ansible_distribution == "CentOS"
   
-- include: ubuntu_gitlab.subtask.yml
+- import_tasks: ubuntu_gitlab.subtask.yml
   when: ansible_distribution == "Ubuntu"

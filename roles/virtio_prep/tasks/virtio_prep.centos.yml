@@ -1,0 +1,21 @@
+- name: Activate VirtIO drivers
+  shell: dracut --add-drivers "virtio_pci virtio_blk virtio_scsi virtio_net" -f -v /boot/initramfs-`uname -r`.img `uname -r`
+
+- name: Remove VMWare Tools
+  yum:
+    name: open-vm-tools
+    state: absent
+
+- name: Install oVirt Guest Agent
+  yum:
+    name: ovirt-guest-agent
+    state: present
+
+- name: Activate oVirt Guest Agent
+  systemd:
+    name: ovirt-guest-agent
+    state: started
+    enabled: yes
+
+- name: Shutdown the host
+  command: shutdown now

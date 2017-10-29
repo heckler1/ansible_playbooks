@@ -1,5 +1,5 @@
-- include: centos_nextcloud.subtask.yml
+- import_tasks: centos_nextcloud.subtask.yml
   when: ansible_distribution == "CentOS"
   
-- include: ubuntu_nextcloud.subtask.yml
+- import_tasks: ubuntu_nextcloud.subtask.yml
   when: ansible_distribution == "Ubuntu"

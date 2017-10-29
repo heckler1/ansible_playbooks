@@ -1,0 +1,6 @@
+---
+- name: Register client with Spacewalk server
+  hosts: all
+  become: true
+  roles:
+  - register_spacewalk

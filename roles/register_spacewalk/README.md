@@ -1,0 +1,1 @@
+This role installs the required repositories and packages, and registers a CentOS-based host with a Spacewalk server. 

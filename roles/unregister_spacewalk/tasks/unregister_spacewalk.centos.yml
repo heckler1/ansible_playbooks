@@ -1,0 +1,7 @@
+- name: Remove Spacewalk packages, repo, and cert
+  yum:
+    name: rhn-client-tools, rhn-check, rhn-setup, rhnsd, yum-rhn-plugin, spacewalk-client-repo, rhn-org-trusted-ssl-cert
+    state: absent
+
+- name: Un-register client with Spacewalk server
+  command: rm -f /etc/sysconfig/rhn/systemid

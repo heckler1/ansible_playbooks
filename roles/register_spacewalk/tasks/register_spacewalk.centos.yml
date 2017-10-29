@@ -1,0 +1,17 @@
+- name: Install Spacewalk repos
+  yum:
+    name: http://yum.spacewalkproject.org/2.7-client/RHEL/7/x86_64/spacewalk-client-repo-2.7-2.el7.noarch.rpm, epel-release
+    state: present
+
+- name: Install Spacewalk packages
+  yum:
+    name: rhn-client-tools, rhn-check, rhn-setup, rhnsd, m2crypto, yum-rhn-plugin
+    state: present
+
+- name: Install Spacewalk cert
+  yum:
+    name: http://spacewalk/pub/rhn-org-trusted-ssl-cert-1.0-1.noarch.rpm
+    state: present
+
+- name: Register client with Spacewalk server
+  command: rhnreg_ks --serverUrl=https://{{ spacewalk_server }}/XMLRPC --sslCACert=/usr/share/rhn/RHN-ORG-TRUSTED-SSL-CERT --activationkey={{ activation_key }}

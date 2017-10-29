@@ -4,37 +4,37 @@
   when: ansible_distribution == "Ubuntu"
   
 #Update Host
-- include: centos_update.subtask.yml
+- import_tasks: centos_update.subtask.yml
   when: ansible_distribution == "CentOS"
-- include: ubuntu_update.subtask.yml
+- import_tasks: ubuntu_update.subtask.yml
   when: ansible_distribution == "Ubuntu"
 
 #Install Base Packages        
 - name: Install packages
   package:
-    name: nano,ntp,wget,open-vm-tools
+    name: nano,ntp,wget,ovirt-guest-agent
     state: latest
 
 #Activate firewall   
-- include: centos_firewall.subtask.yml
+- import_tasks: centos_firewall.subtask.yml
   when: ansible_distribution == "CentOS"
-- include: ubuntu_firewall.subtask.yml
+- import_tasks: ubuntu_firewall.subtask.yml
   when: ansible_distribution == "Ubuntu"
 
 #Install SSH Keys
-- include: ssh_auth_config.subtask.yml 
+- import_tasks: ssh_auth_config.subtask.yml 
 
 #Configure NTP
-- include: centos_ntp.subtask.yml
+- import_tasks: centos_ntp.subtask.yml
   when: ansible_distribution == "CentOS"
-- include: ubuntu_ntp.subtask.yml
+- import_tasks: ubuntu_ntp.subtask.yml
   when: ansible_distribution == "Ubuntu"
 
 #Remove Security Vulnerabilities
-- include: centos_hardening.subtask.yml
+- import_tasks: centos_hardening.subtask.yml
   when: ansible_distribution == "CentOS"
-- include: ubuntu_hardening.subtask.yml
+- import_tasks: ubuntu_hardening.subtask.yml
   when: ansible_distribution == "Ubuntu"
 
 #Reboot Host
-- include: reboot.subtask.yml
+- import_tasks: reboot.subtask.yml

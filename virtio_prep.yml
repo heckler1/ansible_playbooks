@@ -1,0 +1,6 @@
+---
+- name: Prepare host for migration from VMWare to oVirt
+  hosts: all
+  become: true
+  roles:
+    - virtio_prep

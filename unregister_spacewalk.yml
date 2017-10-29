@@ -1,0 +1,6 @@
+---
+- name: Un-register client from Spacewalk server
+  hosts: all
+  become: true
+  roles:
+  - unregister_spacewalk

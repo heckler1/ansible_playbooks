@@ -1,5 +1,5 @@
-- include: centos_mysql.subtask.yml
+- import_tasks: centos_mysql.subtask.yml
   when: ansible_distribution == "CentOS"
   
-- include: ubuntu_mysql.subtask.yml
+- import_tasks: ubuntu_mysql.subtask.yml
   when: ansible_distribution == "Ubuntu"
