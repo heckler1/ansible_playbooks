@@ -1,0 +1,7 @@
+---
+- name: Update and configure new Linux-based laptop
+  hosts: all
+  become: true
+  roles:
+    - common
+    - laptop

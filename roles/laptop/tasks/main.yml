@@ -1,0 +1,30 @@
+- name: Add package repositories
+  apt_repository:
+    repo: '{{ item }}'
+    state: present
+  with_items:
+  - ppa:nextcloud-devs/client
+  - ppa:remmina-ppa-team/remmina-next
+  - deb http://repository.spotify.com stable non-free
+
+- name: Update repositories
+  apt:
+    update_cache: yes
+
+- name: Install Apt Packages
+  apt:
+    name: nextcloud-client remmina remmina-plugin-rdp remmina-plugin-gnome libfreerdp-plugins-standard minicom spotify-client
+    state: present
+
+- name: Install .deb Packages
+  apt:
+    deb: '{{ item }}'
+  with_items:
+  - https://go.microsoft.com/fwlink/?LinkID=760868
+  - https://downloads.slack-edge.com/linux_releases/slack-desktop-2.8.2-amd64.deb
+  - http://download.virtualbox.org/virtualbox/5.2.0/virtualbox-5.2_5.2.0-118431~Ubuntu~xenial_amd64.deb
+
+- name: Auto-remove orphaned dependencies and repo listings
+  apt:
+    autoremove: yes
+    autoclean: yes
