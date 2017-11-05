@@ -25,6 +25,7 @@
   systemd:
     state: restarted
     name: sshd
+    enabled: yes
 
 - name: Disable TCP timestamps - Ubuntu
   lineinfile:
