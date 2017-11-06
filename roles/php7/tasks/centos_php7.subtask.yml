@@ -1,7 +1,7 @@
 #Installs PHP7 on CentOS 7
-- name: Install PHP repository - CentOS
+- name: Install IUS Community repository - CentOS
   yum:
-    name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+    name: https://centos7.iuscommunity.org/ius-release.rpm
     state: present
 
 - name: Install PHP and dependencies - CentOS
@@ -9,15 +9,25 @@
     name: '{{ item }}'
     state: latest
   with_items:
-    - php70w
-    - php70w-dom
-    - php70w-mbstring
-    - php70w-gd
-    - php70w-pdo
-    - php70w-json
-    - php70w-xml
-    - php70w-zip
-    - php70w-curl
-    - php70w-mcrypt
-    - php70w-pear
-    - php70w-mysql
+    - mod_php70u
+    - php70u
+    - php70u-cli
+    - php70u-common
+    - php70u-devel
+    - php70u-fpm
+    - php70u-imap
+    - php70u-intl
+    - php70u-pecl-apcu
+    - php70u-pecl-smbclient
+    - php70u-process
+    - php70u-dom
+    - php70u-mbstring
+    - php70u-gd
+    - php70u-pdo
+    - php70u-json
+    - php70u-xml
+    - php70u-zip
+    - php70u-curl
+    - php70u-mcrypt
+    - php70u-pear
+    - php70u-mysqlnd
