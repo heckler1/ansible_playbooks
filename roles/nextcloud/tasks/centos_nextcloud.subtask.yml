@@ -5,8 +5,9 @@
     name: '{{ item }}'
     state: latest
   with_items:
-    - php70w-opcache
-    - php70w-pecl-apcu
+    - php70u-opcache
+    - php70u-pecl-apcu
+    - php70u-pecl-smbclient
 
 - name: Create a database for Nextcloud - CentOS
   mysql_db:

@@ -17,8 +17,6 @@
     - php70u-fpm
     - php70u-imap
     - php70u-intl
-    - php70u-pecl-apcu
-    - php70u-pecl-smbclient
     - php70u-process
     - php70u-dom
     - php70u-mbstring
