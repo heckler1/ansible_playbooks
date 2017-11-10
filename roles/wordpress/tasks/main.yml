@@ -1,3 +1,9 @@
+dependencies:
+- { role: common }
+- { role: mysql }
+- { role: apache }
+- { role: php7 }
+
 - import_tasks: centos_wordpress.subtask.yml
   when: ansible_distribution == "CentOS"
   

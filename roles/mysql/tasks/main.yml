@@ -1,3 +1,6 @@
+dependencies:
+- { role: common }
+
 - import_tasks: centos_mysql.subtask.yml
   when: ansible_distribution == "CentOS"
   
