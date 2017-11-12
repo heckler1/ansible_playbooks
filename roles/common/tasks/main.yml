@@ -10,9 +10,14 @@
   when: ansible_distribution == "Ubuntu"
 
 #Install Base Packages        
-- name: Install packages
+- name: Install base packages
   package:
-    name: nano,ntp,wget,ovirt-guest-agent
+    name: nano,ntp,wget,epel-release
+    state: latest
+
+- name: Install oVirt Guest Agent
+  package:
+    name: ovirt-guest-agent
     state: latest
 
 # Configure oVirt Guest Agent
