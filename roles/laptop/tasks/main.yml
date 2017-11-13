@@ -1,6 +1,3 @@
-dependencies:
-- { role: common }
-
 - name: Add Spotify signing keys
   apt_key:
     keyserver: hkp://keyserver.ubuntu.com:80

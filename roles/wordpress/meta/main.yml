@@ -1,0 +1,5 @@
+dependencies:
+- { role: common }
+- { role: mysql }
+- { role: apache }
+- { role: php7 }

@@ -2,7 +2,7 @@
 
 - name: Install WordPress dependencies - CentOS
   yum:
-    name: php70w-gd
+    name: php70u-gd
     state: latest
 
 - name: Create a database for WordPress - CentOS
