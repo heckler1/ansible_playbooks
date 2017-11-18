@@ -12,8 +12,14 @@
 #Install Base Packages        
 - name: Install base packages
   package:
-    name: nano,ntp,wget,epel-release
+    name: nano,ntp,wget
     state: latest
+
+- name: Install EPEL repo
+  package:
+    name: epel-release
+    state: latest
+  when: ansible_distribution == "CentOS"
 
 - name: Install oVirt Guest Agent
   package:
