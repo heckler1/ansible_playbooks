@@ -15,18 +15,7 @@
     name: nano,ntp,wget
     state: latest
 
-- name: Install EPEL repo
-  package:
-    name: epel-release
-    state: latest
-  when: ansible_distribution == "CentOS"
-
-- name: Install oVirt Guest Agent
-  package:
-    name: ovirt-guest-agent
-    state: latest
-
-# Configure oVirt Guest Agent
+# Install and Configure oVirt Guest Agent
 - import_tasks: centos_ovirtguestagent.subtask.yml
   when: ansible_distribution == "CentOS"
 - import_tasks: ubuntu_ovirtguestagent.subtask.yml
