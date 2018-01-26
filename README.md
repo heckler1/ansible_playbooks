@@ -1,5 +1,5 @@
 # Ansible Plays and Roles
-All plays will run on CentOS 7 or Ubuntu 16.04 unless stated otherwise. They require the sudo password to be set. This can be done at runtime with -K, or by setting the variable "ansible_become_pass".
+All plays will run on CentOS 7 or Ubuntu 16.04 unless stated otherwise. They require the sudo password to be set. This can be done at runtime with `-K`, or by setting the variable `ansible_become_pass`.
 
 #### Apache
 The Apache role installs an Apache 2 server with self-signed HTTPS and a strict TLS configuration.
