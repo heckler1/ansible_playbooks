@@ -12,14 +12,8 @@
 #Install Base Packages        
 - name: Install base packages
   package:
-    name: nano,ntp,wget
+    name: nano,ntp,wget,open-vm-tools
     state: latest
-
-# Install and Configure oVirt Guest Agent
-- import_tasks: centos_ovirtguestagent.subtask.yml
-  when: ansible_distribution == "CentOS"
-- import_tasks: ubuntu_ovirtguestagent.subtask.yml
-  when: ansible_distribution == "Ubuntu"
 
 #Activate firewall   
 - import_tasks: centos_firewall.subtask.yml
