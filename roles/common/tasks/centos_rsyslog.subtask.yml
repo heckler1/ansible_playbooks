@@ -1,0 +1,13 @@
+#Configures rsyslogd on Ubuntu 16.04
+  
+- name: Configure rsyslogd - Ubuntu
+  blockinfile:
+    path: /etc/rsyslog.conf
+    block: |
+      *.* @{{syslog_server}}:{{syslog_port}};RSYSLOG_SyslogProtocol23Format
+
+- name: Restart rsyslog and set it to start at boot - Ubuntu
+  systemd:
+    name: rsyslog
+    state: restarted
+    enabled: yes

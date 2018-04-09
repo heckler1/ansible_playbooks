@@ -1,2 +1,4 @@
 user: admin
 key_file: authorized_keys
+syslog_server: 192.168.1.2
+syslog_port: 514

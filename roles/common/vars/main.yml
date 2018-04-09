@@ -1,2 +1,4 @@
 user:
 key_file:
+syslog_server:
+syslog_port:
