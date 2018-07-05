@@ -1,0 +1,34 @@
+- name: Install required packages
+  package:
+    name: autofs,samba-common,cifs-utils
+    state: present
+
+- name: Edit master configuration file
+  lineinfile:
+    path: /etc/auto.master
+    line: /mnt/samba /etc/auto.cifs --timeout=600 --ghost
+
+
+- name: Create share configuration file
+  lineinfile:
+    path: /etc/auto.cifs
+    create: yes
+    line: share_data -fstype=cifs,rw,noperm,credentials=/etc/smbcreds.txt ://{{ smb_server }}/{{ smb_sharename }}
+
+
+- name: Create credential file
+  blockinfile:
+    path: /etc/smbcreds.txt
+    create: yes
+    owner: root
+    group: root
+    mode: 600
+    block: |
+      username={{ smb_user }}
+      password={{ smb_password }}
+
+- name: Restart AutoFS and set it to start at boot
+  systemd: 
+    name: autofs
+    state: restarted
+    enabled: yes
