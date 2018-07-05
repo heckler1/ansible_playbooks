@@ -49,6 +49,9 @@ The reboot role reboots the host and, by default, waits up to 60 seconds for it 
 #### Register Spacewalk
 The register Spacewalk role installs the required pacakges and registers a host with the designated Spacewalk server. For CentOS hosts only.
 
+#### SMB Mount
+The SMB mount role sets up an AutoFS mount of an SMB share based on the variables provided.
+
 #### Unregister Spacewalk
 The unregister Spacewalk role removes the Spacewalk packages, with the exception of m2crypto and epel-release, and unregisters the host from Spacewalk. For CentOS hosts only.
 
