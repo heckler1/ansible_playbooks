@@ -1,9 +1,0 @@
-- name: Install oVirt Guest Agent
-  apt:
-    deb: https://launchpad.net/ubuntu/+archive/primary/+files/ovirt-guest-agent_1.0.13.dfsg-2_all.deb
-
-- name: Activate oVirt Guest Agent
-  systemd:
-    name: ovirt-guest-agent
-    state: started
-    enabled: yes

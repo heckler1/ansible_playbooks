@@ -1,1 +1,0 @@
-This play sets up all the repos and packages I want in a fresh Ubuntu installation for my work/school laptop.

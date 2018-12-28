@@ -2,16 +2,12 @@
   authorized_key:
     user: '{{ user }}'
     state: present
-    key: '{{ item }}'
+    key: '{{ lookup("file", "{{ public_key }}") }}'
     manage_dir: yes
-  with_file:
-   - '{{ key_file }}'
    
 - name: Add keys for root
   authorized_key:
     user: root
     state: present
-    key: '{{ item }}'
+    key: '{{ lookup("file", "{{ public_key }}") }}'
     manage_dir: yes
-  with_file:
-   - '{{ key_file }}'

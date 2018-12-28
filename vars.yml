@@ -1,0 +1,48 @@
+#####
+## Variables for the roles
+####
+
+# apache and nginx_webserver
+hostname: 
+# 2 letter country and state for cert generation
+country: 
+state: 
+city: 
+org: 
+
+# common
+user: 
+public_key: 
+
+# rsyslog
+syslog_server:
+syslog_port:
+
+# gitlab
+external_url:
+# email address gitlab will use to send email
+gitlab_email:
+smtp_server:
+smtp_port:
+smtp_username:
+smtp_password:
+smtp_domain:
+
+# mysql
+mysql_root_password:
+
+# nextcloud
+mysql_nextcloud_password:
+
+# register_spacewalk
+spacewalk_server:
+activation_key:
+
+# smb_mount
+smb_server:
+smb_sharename:
+smb_user:
+smb_password:
+
+# wordpress
+mysql_wordpress_password:

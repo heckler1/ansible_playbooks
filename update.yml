@@ -4,13 +4,14 @@
   become: true
   tasks:
     - name: Update repositories and installed packages - CentOS
-      package:
+      yum:
         name: '*'
         state: latest
       when: ansible_distribution == "CentOS"
       
     - name: Auto-remove orphaned dependencies - CentOS
-      command: yum -y autoremove
+      yum:
+        autoremove: true
       when: ansible_distribution == "CentOS"
 
     - name: Update repositories - Ubuntu

@@ -30,12 +30,6 @@
 - import_tasks: ubuntu_ntp.subtask.yml
   when: ansible_distribution == "Ubuntu"
 
-#Configure rsyslog
-- import_tasks: centos_rsyslog.subtask.yml
-  when: ansible_distribution == "CentOS"
-- import_tasks: ubuntu_rsyslog.subtask.yml
-  when: ansible_distribution == "Ubuntu"
-
 #Mitigate Security Vulnerabilities
 - import_tasks: centos_hardening.subtask.yml
   when: ansible_distribution == "CentOS"
