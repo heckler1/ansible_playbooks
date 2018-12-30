@@ -42,9 +42,6 @@ The NGINX web server role installs an NGINX web server with self-signed HTTPS an
 #### PHP
 The PHP role installs PHP 7.
 
-#### Reboot
-The reboot role reboots the host and, by default, waits up to 60 seconds for it to come back online, checking every 15 seconds. These values are relatively short, and geared towards virtual machines. For physical hosts, higher values are recommended.
-
 #### Register Spacewalk
 The register Spacewalk role installs the required pacakges and registers a host with the designated Spacewalk server. For CentOS hosts only.
 

@@ -1,4 +1,4 @@
-#Installs HTTPS Apache on Ubuntu 16.04
+#Installs HTTPS Apache on Ubuntu 18.04
   
 - name: Set hostname - Ubuntu
   hostname:
@@ -6,10 +6,8 @@
 
 - name: Install Apache and dependencies - Ubuntu
   apt:
-    name: '{{ item }}'
+    name: apache2
     state: latest
-  with_items:
-    - apache2
     
 - name: Create certificate directory - Ubuntu
   file:

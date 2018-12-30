@@ -6,26 +6,5 @@
 
 - name: Install PHP and dependencies - CentOS
   yum:
-    name: '{{ item }}'
+    name: mod_php72u,php72u,php72u-cli,php72u-common,php72u-devel,php72u-fpm,php72u-imap,php72u-intl,php72u-process,php72u-dom,php72u-mbstring,php72u-gd,php72u-pdo,php72u-json,php72u-xml,php72u-zip,php72u-curl,php72u-mysqlnd
     state: latest
-  with_items:
-    - mod_php70u
-    - php70u
-    - php70u-cli
-    - php70u-common
-    - php70u-devel
-    - php70u-fpm
-    - php70u-imap
-    - php70u-intl
-    - php70u-process
-    - php70u-dom
-    - php70u-mbstring
-    - php70u-gd
-    - php70u-pdo
-    - php70u-json
-    - php70u-xml
-    - php70u-zip
-    - php70u-curl
-    - php70u-mcrypt
-    - php70u-pear
-    - php70u-mysqlnd

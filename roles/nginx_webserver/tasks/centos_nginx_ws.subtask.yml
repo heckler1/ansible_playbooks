@@ -11,10 +11,8 @@
 
 - name: Install NGINX and dependencies - CentOS
   yum:
-    name: '{{ item }}'
+    name: nginx
     state: latest
-  with_items:
-    - nginx
 
 - name: Create certificate directory - CentOS
   file:
@@ -55,7 +53,6 @@
         ## verify chain of trust of OCSP response using Root CA and Intermediate certs
         ssl_trusted_certificate /etc/nginx/ssl/nginx.crt;
       }
-
 
 - name: Restart NGINX and set it to start at boot - CentOS
   systemd: 

@@ -6,14 +6,8 @@
 
 - name: Install Apache and dependencies - CentOS
   yum:
-    name: '{{ item }}'
+    name: httpd,setroubleshoot-server,unzip,libselinux-python,mod_ssl
     state: latest
-  with_items:
-    - httpd
-    - setroubleshoot-server
-    - unzip
-    - libselinux-python
-    - mod_ssl
 
 - name: Create certificate directory - CentOS
   file:

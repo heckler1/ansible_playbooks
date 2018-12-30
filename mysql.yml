@@ -2,5 +2,30 @@
 - name: Install MariaDB or MySQL and complete mysql_secure_installation
   hosts: all
   become: true
+
+# Skip gathering facts at the beginning, to prevent errors if Python is not installed
+  gather_facts: false
+
+# Make sure Python is installed on our Ubuntu hosts, before we try to run anything
+  pre_tasks:
+  - name: Check if this is Ubuntu
+    raw: bash -c "test -e /etc/lsb-release"
+    register: ubuntu
+    ignore_errors: yes
+
+  - name: Install Python 2 for Ansible
+    raw: bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qqy python-minimal)"
+    register: output
+    changed_when: output.stdout != ""
+    when: ubuntu
+
+# Gather the facts after we confirm Python is installed
+  - name: Gathering Facts
+    setup:
+
   roles:
     - mysql
+
+  tasks:
+  - name: Reboot
+    reboot:

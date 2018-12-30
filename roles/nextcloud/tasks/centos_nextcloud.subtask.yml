@@ -1,13 +1,9 @@
-#Installs Nextcloud 12 on CentOS 7
+#Installs Nextcloud 15 on CentOS 7
 
 - name: Install Nextcloud dependencies - CentOS
   yum:
-    name: '{{ item }}'
+    name: php72u-opcache,php72u-pecl-apcu,php72u-pecl-imagick
     state: latest
-  with_items:
-    - php70u-opcache
-    - php70u-pecl-apcu
-    - php70u-pecl-smbclient
 
 - name: Create a database for Nextcloud - CentOS
   mysql_db:
@@ -33,7 +29,7 @@
 - name: Download and unzip Nextcloud
   when: nextcloud_files.stat.exists == False
   unarchive:
-    src: https://download.nextcloud.com/server/releases/latest-12.zip
+    src: https://download.nextcloud.com/server/releases/latest-15.zip
     dest: /var/www/
     remote_src: yes
         
@@ -63,11 +59,11 @@
    policy: targeted
    
 - name: Backup opcache.ini - CentOS
-  command: mv /etc/php.d/opcache.ini /etc/php.d/opcache.ini.bak
+  command: mv /etc/php.d/10-opcache.ini /etc/php.d/10-opcache.ini.bak
   
 - name: Apply recommended opcache configuration - CentOS
   blockinfile:
-    path: /etc/php.d/opcache.ini
+    path: /etc/php.d/10-opcache.ini
     create: yes
     block: |
       zend_extension=/usr/lib64/php/modules/opcache.so

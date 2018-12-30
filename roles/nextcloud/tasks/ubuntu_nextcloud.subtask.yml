@@ -1,4 +1,4 @@
-#Installs Nextcloud 12 on Ubuntu 16.04
+#Installs Nextcloud 15 on Ubuntu 18.04
 
 - name: Install Nextcloud dependencies - Ubuntu
   apt:
@@ -6,19 +6,27 @@
     state: latest
 
 - name: Create a database for Nextcloud - Ubuntu
-  mysql_db:
-    name: nextcloud
-    state: present
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - CREATE DATABASE nextcloud
+  ignore_errors: True
 
 - name: Create Nextcloud database user - Ubuntu
-  mysql_user:
-    name: nextcloud
-    password: '{{ mysql_nextcloud_password }}'
-    priv: 'nextcloud.*:ALL'
-    state: present
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - CREATE USER 'nextcloud' IDENTIFIED BY '{{ mysql_nextcloud_password }}'
+  ignore_errors: True
+
+- name: Grant privileges to Nextcloud database user - Ubuntu
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - GRANT ALL privileges ON `nextcloud`.* TO 'nextcloud'@localhost IDENTIFIED BY '{{ mysql_nextcloud_password }}'
 
 - name: Reload privilege tables - Ubuntu
-  command: 'mysql -ne "FLUSH PRIVILEGES"'
+  command: 'mysql -u root -ne "FLUSH PRIVILEGES"'
   changed_when: False
 
 - name: Check if Nextcloud is already in the webroot - Ubuntu
@@ -29,7 +37,7 @@
 - name: Download and unzip Nextcloud - Ubuntu
   when: nextcloud_files.stat.exists == False
   unarchive:
-    src: https://download.nextcloud.com/server/releases/latest-12.zip
+    src: https://download.nextcloud.com/server/releases/latest-15.zip
     dest: /var/www/
     remote_src: yes
         
@@ -54,11 +62,11 @@
     state: directory
 
 - name: Backup opcache.ini - Ubuntu
-  command: mv /etc/php/7.0/apache2/conf.d/10-opcache.ini /etc/php/7.0/apache2/conf.d/10-opcache.ini.bak
+  command: mv /etc/php/7.2/apache2/conf.d/10-opcache.ini /etc/php/7.2/apache2/conf.d/10-opcache.ini.bak
   
 - name: Apply recommended opcache configuration - Ubuntu
   blockinfile:
-    path: /etc/php/7.0/apache2/conf.d/10-opcache.ini
+    path: /etc/php/7.2/apache2/conf.d/10-opcache.ini
     create: yes
     block: |
       zend_extension=opcache.so

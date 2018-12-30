@@ -2,26 +2,31 @@
 
 - name: Install Wordpress dependencies - Ubuntu
   apt:
-    name: '{{ item }}'
+    name: php-gd,unzip
     state: latest
-  with_items:
-  - php-gd
-  - unzip
 
 - name: Create a database for WordPress - Ubuntu
-  mysql_db:
-    name: wordpress
-    state: present
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - CREATE DATABASE wordpress
+  ignore_errors: True
 
 - name: Create WordPress database user - Ubuntu
-  mysql_user:
-    name: wordpress
-    password: '{{ mysql_wordpress_password }}'
-    priv: 'wordpress.*:ALL'
-    state: present
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - CREATE USER 'wordpress' IDENTIFIED BY '{{ mysql_wordpress_password }}'
+  ignore_errors: True
+
+- name: Grant privileges to WordPress database user - Ubuntu
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - GRANT ALL privileges ON `wordpress`.* TO 'wordpress'@localhost IDENTIFIED BY '{{ mysql_wordpress_password }}'
 
 - name: Reload privilege tables - Ubuntu
-  command: 'mysql -ne "FLUSH PRIVILEGES"'
+  command: 'mysql -u root -ne "FLUSH PRIVILEGES"'
   changed_when: False
     
 - name: Check if WordPress is already in the webroot - Ubuntu

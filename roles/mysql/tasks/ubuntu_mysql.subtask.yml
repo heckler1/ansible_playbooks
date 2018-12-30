@@ -1,19 +1,13 @@
-# Installs MySQL and completes mysql_secure_installation on Ubuntu 16.04
+# Installs MySQL and completes mysql_secure_installation on Ubuntu 18.04
 
 - name: Install MySQL and dependencies - Ubuntu
   apt:
-    name: '{{ item }}'
+    name: mysql-server,python-pip
     state: latest
-  with_items:
-  - mysql-server
-  - libmysqlclient-dev
-  - python-pip
-  - gcc
-  - python-dev
   
 - name: Install MySQL Python module - Ubuntu
   pip:
-    name: MySQL-Python
+    name: PyMySQL
     state: latest
 
 - name: Set MySQL to start at boot - Ubuntu
@@ -22,45 +16,24 @@
     state: started
     enabled: yes
 
-- name: Set root password - Ubuntu
-  mysql_user: 
-    name: root
-    host: '{{ item }}'
-    password: '{{ mysql_root_password }}'
-    state: present
-    check_implicit_admin: yes
-    login_password: '{{ mysql_root_password }}'
-  with_items:
-    - localhost
-    - 127.0.0.1
-    - ::1
-
-- name: Add root .my.cnf - Ubuntu
-  template: 
-    src: my.cnf.j2
-    dest: /root/.my.cnf 
-    owner: root
-    group: root
-    mode: 0600
- 
 - name: Reload privilege tables - Ubuntu
-  command: 'mysql -ne "FLUSH PRIVILEGES"'
+  command: 'mysql -u root -ne "FLUSH PRIVILEGES"'
   changed_when: False
 
 - name: Remove anonymous users - Ubuntu
-  mysql_user:
-    name: ''
-    host_all: yes
-    state: absent
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - DELETE FROM mysql.user WHERE User=''
 
 - name: Disallow root login remotely - Ubuntu
-  command: 'mysql -ne "{{ item }}"'
+  command: 'mysql -u root -ne "{{ item }}"'
   changed_when: False
   with_items:
   - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
 
 - name: Remove test database and access to it - Ubuntu
-  command: 'mysql -ne "{{ item }}"'
+  command: 'mysql -u root -ne "{{ item }}"'
   with_items:
     - DROP DATABASE test
     - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
@@ -68,5 +41,5 @@
   ignore_errors: True
 
 - name: Reload privilege tables - Ubuntu
-  command: 'mysql -ne "FLUSH PRIVILEGES"'
+  command: 'mysql -u root -ne "FLUSH PRIVILEGES"'
   changed_when: False

@@ -6,10 +6,8 @@
 
 - name: Install NGINX and dependencies - Ubuntu
   apt:
-    name: '{{ item }}'
+    name: nginx
     state: latest
-  with_items:
-    - nginx
     
 - name: Create certificate directory - Ubuntu
   file:
@@ -18,15 +16,6 @@
     
 - name: Generate self-signed HTTPS certificates - Ubuntu
   command: openssl req -new -nodes -x509 -subj "/C={{ country }}/ST={{ state }}/L={{ city }}/O={{ org }}/CN={{ hostname }}" -days 3650 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt -extensions v3_ca creates=/etc/nginx/ssl/nginx.crt
-
-#- name: Enable required NGINX modules - Ubuntu
-#  apache2_module:
-#    name: '{{ item }}'
-#    state: present
-#  with_items: 
-#  - ssl
-#  - rewrite
-#  - headers
   
 - name: Create NGINX configuration file - Ubuntu
   blockinfile:

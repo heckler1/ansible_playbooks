@@ -7,18 +7,12 @@
     
 - name: Install MariaDB and dependencies - CentOS
   yum:
-    name: '{{ item }}'
+    name: mariadb-server,mariadb-devel,python-pip,gcc,python-devel
     state: latest
-  with_items:
-  - mariadb-server
-  - mariadb-devel
-  - python-pip
-  - gcc
-  - python-devel
-  
+
 - name: Install MySQL Python module - CentOS
   pip:
-    name: MySQL-Python
+    name: PyMySQL
     state: latest
 
 - name: Set MariaDB to start at boot - CentOS
@@ -53,10 +47,10 @@
   changed_when: False
 
 - name: Remove anonymous users - CentOS
-  mysql_user:
-    name: ''
-    host_all: yes
-    state: absent
+  command: 'mysql -u root -ne "{{ item }}"'
+  changed_when: False
+  with_items:
+  - DELETE FROM mysql.user WHERE User=''
 
 - name: Disallow root login remotely - CentOS
   command: 'mysql -ne "{{ item }}"'
