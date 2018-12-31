@@ -7,7 +7,6 @@ This role performs the following tasks:
 1. It installs some useful utilities: wget, nano, ntpd, and open-vm-tools.
 1. It starts the firewall of the host, allows SSH, and sets the firewall to start on boot.
 1. It installs your public SSH keys to the root account and a user of your choice.
-1. It removes the host's default NTP servers and sets ntpd to use Google's NTP servers. (Warning: Google's NTP smears leap seconds)
 1. It hardens the security settings for SSHD to only allow known secure cipher suites and MACs.
 1. It forces root logins over SSH to use key-based auth.
 1. It disables TCP timestamps.

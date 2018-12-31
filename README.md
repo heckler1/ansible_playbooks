@@ -12,7 +12,6 @@ The common role performs the following tasks:
 1. It installs some useful utilities: wget, nano, ntpd, and open-vm-tools.
 1. It starts the firewall of the host, allows SSH, and sets the firewall to start on boot.
 1. It installs your public SSH keys to the root account and a user of your choice.
-1. It removes the host's default NTP servers and sets ntpd to use Google's NTP servers. (Warning: Google's NTP smears leap seconds)
 1. It hardens the security settings for SSHD to only allow known secure cipher suites and MACs.
 1. It forces root logins over SSH to use key-based auth.
 1. It disables TCP timestamps.
@@ -22,16 +21,16 @@ The common role performs the following tasks:
 The GitLab role installs a GitLab server. It is designed to be used with an external SMTP relay.
 
 #### LAMP
-The LAMP play installs the Apache, MySQL, and PHP roles and then reboots the host.
+The LAMP play installs the Apache, MySQL, and PHP7 roles and then reboots the host.
 
 #### LEMP
-The LEMP play installs the NGINX web server, MySQL, and PHP roles and then reboots the host.
+The LEMP play installs the NGINX web server, MySQL, and PHP7 roles and then reboots the host.
 
 #### MySQL
 The MySQL role installs MariaDB/MySQL and completes mysql_secure_installation.
 
 #### Nextcloud
-The Nextcloud role installs Nextcloud with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs by default.
+The Nextcloud role installs Nextcloud with Apache 2, PHP 7, and MariaDB/MySQL. It sets up self-signed HTTPS certs by default.
 A Nextcloud instance installed with this play returns a 0/10 on OpenVAS.
 DB name is "nextcloud". DB user is "nextcloud"
 To remove the memcache warning on the Nextcloud Admin page, just add the line `'memcache.local' => '\OC\Memcache\APCu',` to `/var/www/html/config/config.php`.
@@ -61,6 +60,6 @@ The update play is self explanatory. It autoremoves unneeded dependencies by def
 The VirtIO prep role prepares a virtual machine for migration from VMWare to oVirt. It activates any necessary drivers in the kernel, removes VMWare tools, installs and activates the oVirt guest agent, and shuts the host down to be migrated.
 
 #### WordPress
-The WordPress role installs WordPress with Apache 2, PHP 7.0, and MariaDB/MySQL. It sets up self-signed HTTPS certs.
+The WordPress role installs WordPress with Apache 2, PHP 7, and MariaDB/MySQL. It sets up self-signed HTTPS certs.
 A WordPress instance installed with this play returns a 0/10 on OpenVAS.
 DB name is "wordpress". DB user is "wordpress"
