@@ -1,4 +1,4 @@
-- name: Install hardened sshd config - CentOS
+- name: Install hardened sshd config
   template: 
     dest: /etc/ssh/sshd_config
     src: sshd_config.j2
@@ -6,17 +6,17 @@
     group: root
     mode: 0600
 
-- name: Restart sshd - Ubuntu
+- name: Restart sshd
   systemd:
     state: restarted
     name: sshd
     enabled: yes
 
-- name: Disable TCP timestamps - Ubuntu
+- name: Disable TCP timestamps
   lineinfile:
     name: /etc/sysctl.conf
     insertafter:
     line: net.ipv4.tcp_timestamps = 0
 
-- name: Refresh sysctl.conf - Ubuntu
+- name: Refresh sysctl.conf
   command: sysctl -p
