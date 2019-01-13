@@ -1,3 +1,14 @@
+# Set the SFTP server location based on OS type (for hardened SSH config)
+- name: "Set SFTP server location - CentOS"
+  set_fact:
+    sshd_sftp_server: /usr/libexec/openssh/sftp-server
+  when: ansible_distribution == "CentOS"
+
+- name: "Set SFTP server location - Ubuntu"
+  set_fact:
+    sshd_sftp_server: /usr/lib/openssh/sftp-server
+  when: ansible_distribution == "Ubuntu"
+
 #Update Host
 - import_tasks: centos_update.subtask.yml
   when: ansible_distribution == "CentOS"
@@ -20,7 +31,5 @@
 - import_tasks: ssh_auth_config.subtask.yml 
 
 #Mitigate Security Vulnerabilities
-- import_tasks: centos_hardening.subtask.yml
-  when: ansible_distribution == "CentOS"
-- import_tasks: ubuntu_hardening.subtask.yml
-  when: ansible_distribution == "Ubuntu"
+- import_tasks: hardening.subtask.yml
+
